@@ -13,3 +13,11 @@ public class ProductNewPrice
     public string EAN { get; set; }
     public double NewPrice { get; set; }
 }
+
+public class ProductStatistics
+{
+    public string EAN { get; set; }
+    public string Name { get; set; }
+    public int TotalSales { get; set; }
+    public double AverageRating { get; set; }
+}

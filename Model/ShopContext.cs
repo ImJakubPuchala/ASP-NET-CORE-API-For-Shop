@@ -16,8 +16,10 @@ public partial class ShopContext : DbContext
     }
 
     public virtual DbSet<Price> Prices { get; set; }
-
     public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<Sale> Sales { get; set; }
+    public virtual DbSet<Review> Reviews { get; set; }
+    public virtual DbSet<Warehouse> Warehouses { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -26,6 +28,7 @@ public partial class ShopContext : DbContext
             optionsBuilder.UseSqlServer("Name=DB");
         }
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Price>(entity =>
@@ -38,9 +41,10 @@ public partial class ShopContext : DbContext
                 .HasColumnName("Price");
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.Prices)
+            entity.HasOne(d => d.Product)
+                .WithMany(p => p.Prices)
                 .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK__Prices__ProductI__4222D4EF");
+                .HasConstraintName("FK__Prices__ProductID__4222D4EF");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -52,6 +56,34 @@ public partial class ShopContext : DbContext
                 .HasMaxLength(30)
                 .HasColumnName("EANCode");
             entity.Property(e => e.Name).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<Sale>(entity =>
+        {
+            entity.HasKey(e => e.SaleId);
+            entity.Property(e => e.QuantitySold).IsRequired();
+            entity.HasOne(d => d.Product)
+                .WithMany(p => p.Sales)
+                .HasForeignKey(d => d.ProductId);
+        });
+
+        modelBuilder.Entity<Review>(entity =>
+        {
+            entity.HasKey(e => e.ReviewId);
+            entity.Property(e => e.Rating).IsRequired();
+            entity.HasOne(d => d.Product)
+                .WithMany(p => p.Reviews)
+                .HasForeignKey(d => d.ProductId);
+        });
+
+        modelBuilder.Entity<Warehouse>(entity =>
+        {
+            entity.HasKey(e => e.WarehouseId);
+            entity.Property(e => e.Quantity).IsRequired();
+            entity.Property(e => e.WarehouseNumber).IsRequired();
+            entity.HasOne(d => d.Product)
+                .WithMany(p => p.WarehouseEntries)
+                .HasForeignKey(d => d.ProductId);
         });
 
         OnModelCreatingPartial(modelBuilder);
