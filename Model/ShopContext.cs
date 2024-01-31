@@ -19,7 +19,7 @@ public partial class ShopContext : DbContext
     public virtual DbSet<Product> Products { get; set; }
     public virtual DbSet<Sale> Sales { get; set; }
     public virtual DbSet<Review> Reviews { get; set; }
-    public virtual DbSet<Warehouse> Warehouses { get; set; }
+    public virtual DbSet<Warehouse> Warehouse { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
