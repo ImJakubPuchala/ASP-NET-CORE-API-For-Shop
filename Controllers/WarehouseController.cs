@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using ASP_NET_CORE_API_For_Shop.ModelDTO;
 
 
 namespace ASP_NET_CORE_API_For_Shop.Controllers;
@@ -20,12 +21,12 @@ public class WarehouseController : ControllerBase
         _context = context;
     }
 
-    [HttpGet("{eanCode}")]
-    public ActionResult<Warehouse> GetWarehouseItemByEAN(string eanCode)
+    [HttpGet("{ean}")]
+    public ActionResult<Warehouse> GetWarehouseItemByEAN(string ean)
     {
         var warehouseItem = _context.Warehouse
                                     .Include(w => w.Product)
-                                    .FirstOrDefault(w => w.Product.Eancode == eanCode);
+                                    .FirstOrDefault(w => w.Product.Eancode == ean);
         if (warehouseItem == null)
         {
             return NotFound("Product not found for the given EAN code.");
