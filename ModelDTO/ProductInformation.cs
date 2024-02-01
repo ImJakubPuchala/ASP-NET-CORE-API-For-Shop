@@ -21,3 +21,10 @@ public class ProductStatistics
     public int TotalSales { get; set; }
     public double AverageRating { get; set; }
 }
+
+public class WarehouseDto
+{
+    public string EANCode { get; set; }
+    public int Quantity { get; set; }
+    public string WarehouseNumber { get; set; }
+}

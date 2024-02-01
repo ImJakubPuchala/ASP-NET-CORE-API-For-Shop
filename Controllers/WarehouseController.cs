@@ -21,23 +21,42 @@ public class WarehouseController : ControllerBase
         _context = context;
     }
 
-    [HttpGet("{ean}")]
-    public ActionResult<Warehouse> GetWarehouseItemByEAN(string ean)
-    {
-        var warehouseItem = _context.Warehouse
-                                    .Include(w => w.Product)
-                                    .FirstOrDefault(w => w.Product.Eancode == ean);
-        if (warehouseItem == null)
-        {
-            return NotFound("Product not found for the given EAN code.");
-        }
-        return warehouseItem;
-    }
-
     [HttpGet("GetAllWarehouseItems")]
     public ActionResult<IEnumerable<Warehouse>> GetAllWarehouseItems()
     {
         var allWarehouseItems = _context.Warehouse;
         return allWarehouseItems.ToList();
+    }
+
+    [HttpPost("AddWarehouseItem")]
+    public async Task<IActionResult> AddWarehouseItem(WarehouseDto warehouseDto)
+    {
+        var product = _context.Products.FirstOrDefault(p => p.Eancode == warehouseDto.EANCode);
+        if (product == null)
+        {
+            return NotFound("Product not found for the given EAN code.");
+        }
+
+        var existingWarehouseItem = _context.Warehouse
+            .FirstOrDefault(w => w.ProductId == product.ProductId && w.WarehouseNumber == warehouseDto.WarehouseNumber);
+
+        if (existingWarehouseItem != null)
+        {
+            existingWarehouseItem.Quantity += warehouseDto.Quantity;
+        }
+        else
+        {
+            var newWarehouseItem = new Warehouse
+            {
+                ProductId = product.ProductId,
+                Quantity = warehouseDto.Quantity,
+                WarehouseNumber = warehouseDto.WarehouseNumber
+            };
+            _context.Warehouse.Add(newWarehouseItem);
+        }
+
+        await _context.SaveChangesAsync();
+
+        return Ok();
     }
 }
