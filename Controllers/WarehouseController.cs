@@ -21,12 +21,30 @@ public class WarehouseController : ControllerBase
         _context = context;
     }
 
+    //[HttpGet("GetAllWarehouseItems")]
+    //public ActionResult<IEnumerable<Warehouse>> GetAllWarehouseItems()
+    //{
+    //    var allWarehouseItems = _context.Warehouse;
+    //    return allWarehouseItems.ToList();
+    //}
     [HttpGet("GetAllWarehouseItems")]
-    public ActionResult<IEnumerable<Warehouse>> GetAllWarehouseItems()
+    public ActionResult<IEnumerable<WarehouseProduct>> GetAllWarehouseItems()
     {
-        var allWarehouseItems = _context.Warehouse;
-        return allWarehouseItems.ToList();
+        var allWarehouseItems = _context.Warehouse
+            .Include(w => w.Product)
+            .Select(w => new WarehouseProduct
+            {
+                WarehouseItemId = w.WarehouseId,
+                ProductId = w.ProductId,
+                ProductName = w.Product.Name, 
+                EANCode = w.Product.Eancode,
+                Quantity = w.Quantity,
+                WarehouseNumber = w.WarehouseNumber
+            }).ToList();
+
+        return allWarehouseItems;
     }
+
 
     [HttpPost("AddWarehouseItem")]
     public async Task<IActionResult> AddWarehouseItem(WarehouseDto warehouseDto)

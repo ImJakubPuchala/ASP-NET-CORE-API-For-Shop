@@ -1,4 +1,4 @@
-﻿namespace ASP_NET_CORE_API_For_Shop.ModelDTO;
+﻿namespace ASP_NET_CORE_API_For_Shop.Model;
 
 public class WarehouseProduct
 {
