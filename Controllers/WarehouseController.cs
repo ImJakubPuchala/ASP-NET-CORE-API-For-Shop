@@ -64,7 +64,7 @@ public class WarehouseController : ControllerBase
         }
         else
         {
-            var newWarehouseItem = new Warehouse
+            var newWarehouseItem = new Model.Warehouse
             {
                 ProductId = product.ProductId,
                 Quantity = warehouseDto.Quantity,
@@ -76,5 +76,27 @@ public class WarehouseController : ControllerBase
         await _context.SaveChangesAsync();
 
         return Ok();
+    }
+
+    [HttpPut("UpdateWarehouseNumber/{warehouseItemId}")]
+    public async Task<IActionResult> UpdateWarehouseNumber(int warehouseItemId, [FromBody] UpdateWarehouseNumberDto updateWarehouseNumberDto)
+    {
+        var warehouseItem = await _context.Warehouse.FindAsync(warehouseItemId);
+
+        if (warehouseItem == null)
+        {
+            return NotFound($"Warehouse item with ID {warehouseItemId} not found.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(updateWarehouseNumberDto.NewWarehouseNumber))
+        {
+            warehouseItem.WarehouseNumber = updateWarehouseNumberDto.NewWarehouseNumber;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        else
+        {
+            return BadRequest("New warehouse number is required.");
+        }
     }
 }
