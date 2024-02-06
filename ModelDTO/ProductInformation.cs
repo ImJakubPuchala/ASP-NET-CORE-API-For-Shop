@@ -28,6 +28,7 @@ public class WarehouseDto
     public int Quantity { get; set; }
     public string WarehouseNumber { get; set; }
 }
+
 public class UpdateWarehouseNumberDto
 {
     public string NewWarehouseNumber { get; set; }
