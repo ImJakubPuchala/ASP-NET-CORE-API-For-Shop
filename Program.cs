@@ -27,6 +27,7 @@ builder.Services.AddDbContext<ShopContext>(options =>
 var app = builder.Build();
 
 app.UseMiddleware<LoggingMiddleware>();
+app.UseMiddleware<LogRequestIPMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
