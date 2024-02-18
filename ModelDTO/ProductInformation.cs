@@ -22,14 +22,4 @@ public class ProductStatistics
     public double AverageRating { get; set; }
 }
 
-public class WarehouseDto
-{
-    public string EANCode { get; set; }
-    public int Quantity { get; set; }
-    public string WarehouseNumber { get; set; }
-}
 
-public class UpdateWarehouseNumberDto
-{
-    public string NewWarehouseNumber { get; set; }
-}
