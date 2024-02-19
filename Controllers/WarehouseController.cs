@@ -21,12 +21,7 @@ public class WarehouseController : ControllerBase
         _context = context;
     }
 
-    //[HttpGet("GetAllWarehouseItems")]
-    //public ActionResult<IEnumerable<Warehouse>> GetAllWarehouseItems()
-    //{
-    //    var allWarehouseItems = _context.Warehouse;
-    //    return allWarehouseItems.ToList();
-    //}
+
     [HttpGet("GetAllWarehouseItems")]
     public ActionResult<IEnumerable<WarehouseProduct>> GetAllWarehouseItems()
     {
